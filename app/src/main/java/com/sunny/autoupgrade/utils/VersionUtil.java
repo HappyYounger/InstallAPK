@@ -58,16 +58,13 @@ public class VersionUtil {
         return BuildConfig.VERSION_NAME;
     }
 
-    private void installAPK(Context context, File apkFile) {
+    public static void installAPK(Context context, File apkFile) {
 
-        //调用系统的安装方法
         Intent intent = new Intent(Intent.ACTION_VIEW);
         Uri data;
         // 判断版本大于等于7.0
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            // "net.csdn.blog.ruancoder.fileprovider"即是在清单文件中配置的authorities
             data = FileProvider.getUriForFile(context, "com.thinker.member.bull.android_bull_member.fileprovider", apkFile);
-            // 给目标应用一个临时授权
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         } else {
@@ -80,39 +77,6 @@ public class VersionUtil {
     }
 
     public static void install(Context context, String packageName, String apkPath) throws IOException {
-
-//        PackageInstaller packageInstaller = context.getPackageManager().getPackageInstaller();
-//
-//        PackageInstaller.SessionParams params =
-//                new PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL);
-//        params.setAppPackageName(packageName);
-//
-//        int sessionId = packageInstaller.createSession(params);
-//        PackageInstaller.Session session = packageInstaller.openSession(sessionId);
-//
-//        OutputStream out = session.openWrite(packageName, 0, -1);
-//        File file = new File(apkPath);
-//        FileInputStream fis = new FileInputStream(file);
-//
-//        byte[] buffer = new byte[65535];
-//        int length;
-//        while ((length = fis.read(buffer)) != -1){
-//
-//            out.write(buffer,0, length);
-//        }
-//        session.fsync(out);
-//        out.close();
-//
-//
-//        // The app gets killed after installation session commit
-//        Intent intent = new Intent(context, UpgradeReceiver.class);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//        session.commit(pendingIntent.getIntentSender());
-//
-////        session.commit(PendingIntent.getBroadcast(context, sessionId,
-////                new Intent("android.intent.action.MY_PACKAGE_REPLACED"), 0).getIntentSender());
-
 
         PackageInstaller packageInstaller = context.getPackageManager().getPackageInstaller();
         PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(

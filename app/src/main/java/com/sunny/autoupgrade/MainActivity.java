@@ -15,6 +15,7 @@ import com.sunny.autoupgrade.network.APIService;
 import com.sunny.autoupgrade.network.entities.AppConfigurationEntity;
 import com.sunny.autoupgrade.utils.Configuration;
 import com.sunny.autoupgrade.utils.StorageUtil;
+import com.sunny.autoupgrade.utils.VersionUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         intent.setDataAndType(uri, "application/vnd.android.package-archive");
         startActivity(intent);
         startActivityForResult(intent, 1);
+
     }
 
     @Override
@@ -73,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         super.onActivityResult(requestCode, resultCode, data);
 
         //取消，不安装apk
-        if(resultCode == 0){
+        if (resultCode == 0) {
 
         }
     }
@@ -145,6 +147,8 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                             if (StorageUtil.saveAPK(responseBody.byteStream())) {
 
                                 updateApp();
+                                VersionUtil.installAPK(MainActivity.this,
+                                        new File(StorageUtil.getFilePath()));
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
