@@ -22,12 +22,6 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name=".UpgradeReceiver" >
-            <intent-filter>
-                <action android:name="ACTION_INSTALL_COMPLETE" />
-            </intent-filter>
-        </receiver>
     </application>
 
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />

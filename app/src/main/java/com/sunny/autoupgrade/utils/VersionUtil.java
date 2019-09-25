@@ -14,7 +14,6 @@ import android.os.Build;
 import androidx.core.content.FileProvider;
 
 import com.sunny.autoupgrade.BuildConfig;
-import com.sunny.autoupgrade.UpgradeReceiver;
 
 import java.io.File;
 import java.io.FileInputStream;
