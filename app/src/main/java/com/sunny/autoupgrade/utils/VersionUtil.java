@@ -70,8 +70,10 @@ public class VersionUtil {
         } else {
 
             data = Uri.fromFile(apkFile);
+
         }
 
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setDataAndType(data, "application/vnd.android.package-archive");
         context.startActivity(intent);
     }
@@ -108,7 +110,7 @@ public class VersionUtil {
         return pendingIntent.getIntentSender();
     }
 
-    public static void uninstall(Context context){
+    public static void uninstall(Context context) {
 
         String appPackage = context.getPackageName();
 
