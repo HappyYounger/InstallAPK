@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         if (appConfigurationEntity.getCode() == 0) {
 
             remoteVersionCode = appConfigurationEntity.getResult().getVerCode();
-            versionCode = BuildConfig.VERSION_CODE;
+            versionCode = VersionUtil.getVersionCode();
 
             //版本有更新
             if (remoteVersionCode > versionCode) {

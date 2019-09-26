@@ -77,46 +77,4 @@ public class VersionUtil {
         intent.setDataAndType(data, "application/vnd.android.package-archive");
         context.startActivity(intent);
     }
-
-    public static void install(Context context, String packageName, String apkPath) throws IOException {
-
-        PackageInstaller packageInstaller = context.getPackageManager().getPackageInstaller();
-        PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(
-                PackageInstaller.SessionParams.MODE_FULL_INSTALL);
-        params.setAppPackageName(packageName);
-        int sessionId = packageInstaller.createSession(params);
-        PackageInstaller.Session session = packageInstaller.openSession(sessionId);
-        OutputStream out = session.openWrite(packageName, 0, -1);
-        File file = new File(apkPath);
-        FileInputStream fis = new FileInputStream(file);
-        byte[] buffer = new byte[65536];
-        int length;
-        while ((length = fis.read(buffer)) != -1) {
-            out.write(buffer, 0, length);
-        }
-        session.fsync(out);
-        fis.close();
-        out.close();
-
-        session.commit(createIntentSender(context, sessionId));
-    }
-
-    private static IntentSender createIntentSender(Context context, int sessionId) {
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                context,
-                sessionId,
-                new Intent("ACTION_INSTALL_COMPLETE"),
-                0);
-        return pendingIntent.getIntentSender();
-    }
-
-    public static void uninstall(Context context) {
-
-        String appPackage = context.getPackageName();
-
-        Intent intent = new Intent(context, context.getClass());
-        PendingIntent sender = PendingIntent.getActivity(context, 0, intent, FLAG_ONE_SHOT);
-        PackageInstaller packageInstaller = context.getPackageManager().getPackageInstaller();
-        packageInstaller.uninstall(appPackage, sender.getIntentSender());
-    }
 }
