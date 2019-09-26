@@ -54,27 +54,15 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        //请求用户开放权限
         requestPermission();
-    }
-
-    private void updateApp() {
-
-        //需要在设备系统中的安全设置中开放：未知来源（unknown sources）
-        Intent intent = new Intent();
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setAction(Intent.ACTION_VIEW);
-        Uri uri = Uri.fromFile(new File(StorageUtil.getFilePath()));
-        intent.setDataAndType(uri, "application/vnd.android.package-archive");
-        startActivity(intent);
-        startActivityForResult(intent, 1);
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //取消，不安装apk
+        //用户点击取消按钮后
         if (resultCode == 0) {
 
         }
@@ -112,8 +100,10 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             remoteVersionCode = appConfigurationEntity.getResult().getVerCode();
             versionCode = BuildConfig.VERSION_CODE;
 
+            //版本有更新
             if (remoteVersionCode > versionCode) {
 
+                //下载APK
                 downloadAPI(appConfigurationEntity.getResult().getUrl());
             }
 
@@ -144,9 +134,10 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     public void onNext(ResponseBody responseBody) {
 
                         try {
+                            //保存到制定目录中
                             if (StorageUtil.saveAPK(responseBody.byteStream())) {
 
-                                updateApp();
+                                //保存成功后，开始安装新版本APK
                                 VersionUtil.installAPK(MainActivity.this,
                                         new File(StorageUtil.getFilePath()));
                             }
@@ -192,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                     @Override
                     public void onNext(AppConfigurationEntity appConfigurationEntity) {
 
+                        //获取到配置信息之后
                         afterGetAppConfig(appConfigurationEntity);
                     }
 
@@ -211,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     @Override
     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
 
+        //用户同意开放权限之后
         afterHasPermission();
     }
 
